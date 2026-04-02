@@ -52,11 +52,7 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -85,20 +81,9 @@
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1rem;
-        }
-
-        .content {
-            padding: 2rem;
-        }
+        .header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 1rem; }
+        .content { padding: 2rem; }
 
         .order-summary {
             background: var(--gray-50);
@@ -123,19 +108,9 @@
             font-size: 1.125rem;
         }
 
-        .item-name {
-            font-weight: 500;
-            color: var(--gray-700);
-        }
-
-        .item-price {
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .payment-section {
-            margin-bottom: 2rem;
-        }
+        .item-name { font-weight: 500; color: var(--gray-700); }
+        .item-price { font-weight: 600; color: var(--gray-900); }
+        .payment-section { margin-bottom: 2rem; }
 
         .section-title {
             font-size: 1.25rem;
@@ -165,17 +140,8 @@
             border-bottom: 1px solid var(--gray-200);
         }
 
-        .bank-detail:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .bank-label {
-            font-weight: 500;
-            color: var(--gray-600);
-            font-size: 0.875rem;
-        }
+        .bank-detail:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .bank-label { font-weight: 500; color: var(--gray-600); font-size: 0.875rem; }
 
         .bank-value-wrapper {
             display: flex;
@@ -210,14 +176,8 @@
             flex-shrink: 0;
         }
 
-        .copy-btn:hover {
-            background: var(--gray-200);
-        }
-
-        .copy-btn.copied {
-            background: var(--success);
-            color: var(--white);
-        }
+        .copy-btn:hover { background: var(--gray-200); }
+        .copy-btn.copied { background: var(--success); color: var(--white); }
 
         .instructions {
             background: var(--gray-50);
@@ -227,26 +187,10 @@
             border-left: 4px solid var(--primary);
         }
 
-        .instructions h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-        }
-
-        .instructions ol {
-            padding-left: 1.5rem;
-            color: var(--gray-700);
-            line-height: 1.6;
-        }
-
-        .instructions li {
-            margin-bottom: 0.5rem;
-        }
-
-        .whatsapp-section {
-            text-align: center;
-        }
+        .instructions h3 { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; }
+        .instructions ol { padding-left: 1.5rem; color: var(--gray-700); line-height: 1.6; }
+        .instructions li { margin-bottom: 0.5rem; }
+        .whatsapp-section { text-align: center; }
 
         .whatsapp-btn {
             background: #25d366;
@@ -265,17 +209,9 @@
             box-shadow: var(--shadow);
         }
 
-        .whatsapp-btn:hover {
-            background: #22c55e;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .whatsapp-icon {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
+        .whatsapp-btn:hover { background: #22c55e; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .whatsapp-btn:disabled, .whatsapp-btn.loading { opacity: 0.7; pointer-events: none; }
+        .whatsapp-icon { width: 24px; height: 24px; fill: currentColor; }
 
         .support-text {
             margin-top: 1.5rem;
@@ -284,104 +220,28 @@
             text-align: center;
         }
 
-        .back-link {
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .back-link:hover {
-            color: var(--primary);
-        }
-
         @media (max-width: 640px) {
-            body {
-                padding: 1rem 0.5rem;
-            }
-            
-            .checkout-container {
-                margin: 0;
-            }
-            
-            .header, .content {
-                padding: 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .header p {
-                font-size: 0.875rem;
-            }
-
-            .order-summary {
-                padding: 1rem;
-            }
-
-            .order-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.25rem;
-                margin-bottom: 0.75rem;
-            }
-
-            .item-name {
-                font-size: 0.875rem;
-            }
-
-            .item-price {
-                font-size: 0.875rem;
-            }
-
-            .bank-info {
-                padding: 1rem;
-            }
-            
-            .bank-value {
-                font-size: 0.875rem;
-            }
-
-            .copy-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-
-            .whatsapp-btn {
-                padding: 0.875rem 1.5rem;
-                font-size: 1rem;
-                width: 100%;
-                justify-content: center;
-            }
-
-            .instructions {
-                padding: 1rem;
-            }
-
-            .instructions h3 {
-                font-size: 1rem;
-            }
-
-            .instructions ol {
-                font-size: 0.875rem;
-            }
-            
-            .back-link {
-                position: static;
-                margin-bottom: 1rem;
-            }
+            body { padding: 1rem 0.5rem; }
+            .checkout-container { margin: 0; }
+            .header, .content { padding: 1.5rem; }
+            .header h1 { font-size: 1.5rem; }
+            .header p { font-size: 0.875rem; }
+            .order-summary { padding: 1rem; }
+            .order-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; margin-bottom: 0.75rem; }
+            .item-name { font-size: 0.875rem; }
+            .item-price { font-size: 0.875rem; }
+            .bank-info { padding: 1rem; }
+            .bank-value { font-size: 0.875rem; }
+            .copy-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+            .whatsapp-btn { padding: 0.875rem 1.5rem; font-size: 1rem; width: 100%; justify-content: center; }
+            .instructions { padding: 1rem; }
+            .instructions h3 { font-size: 1rem; }
+            .instructions ol { font-size: 0.875rem; }
         }
     </style>
 </head>
 <body>
-     <div class="checkout-container">
+    <div class="checkout-container">
         <div class="header">
             <h1>Finalizar Compra</h1>
             <p>Paquete + 200 Planos Técnicos Profesionales</p>
@@ -456,12 +316,13 @@
             </div>
 
             <div class="whatsapp-section">
-                <a href="#" 
+                <a href="#"
                    id="whatsappBtn"
-                   class="whatsapp-btn" 
+                   class="whatsapp-btn"
                    target="_blank"
                    rel="noopener noreferrer"
-                   aria-label="Enviar comprobante por WhatsApp">
+                   aria-label="Enviar comprobante por WhatsApp"
+                   onclick="buildWhatsappLink(event)">
                     <svg class="whatsapp-icon" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.63"/>
                     </svg>
@@ -477,35 +338,9 @@
     </div>
 
     <script>
-        // ─── TRACKING: leer fbp y fbclid ───────────────────────────────────────
-        function getTrackingData() {
-            // Leer una cookie por nombre
-            function getCookie(name) {
-                const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-                return match ? decodeURIComponent(match[2]) : null;
-            }
-
-            // Intentar obtener fbclid: primero de la URL, luego del cookie _fbc
-            function getFbc() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const fbclid = urlParams.get('fbclid');
-                if (fbclid) {
-                    // Construir formato estándar de fbc: fb.1.<timestamp>.<fbclid>
-                    return 'fb.1.' + Date.now() + '.' + fbclid;
-                }
-                // Si ya existe el cookie _fbc (lo genera el Pixel automáticamente)
-                return getCookie('_fbc') || null;
-            }
-
-            return {
-                fbp: getCookie('_fbp') || null,   // generado por el Pixel en esta misma página
-                fbc: getFbc() || null              // viene del clic en el anuncio
-            };
-        }
-
         // ─── CONFIGURACIÓN DE TURNOS ────────────────────────────────────────────
         const config = {
-            turno1: { // 3 PM a 3 AM
+            turno1: {
                 phone: '5214621579719',
                 schedule: 'Horario de atención: 9:00 AM - 11:00 PM',
                 bank: 'BBVA México',
@@ -513,7 +348,7 @@
                 clabe: '012210028972966223',
                 concepto: 'Paquete de Planos'
             },
-            turno2: { // 3 AM a 3 PM
+            turno2: {
                 phone: '5214622856400',
                 schedule: 'Horario de atención: 9:00 AM - 11:00 PM',
                 bank: 'BBVA México',
@@ -527,65 +362,98 @@
             const now = new Date();
             const mexicoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Mexico_City' }));
             const hour = mexicoTime.getHours();
-            if ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3)) {
-                return config.turno1;
-            } else {
-                return config.turno2;
+            return ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3))
+                ? config.turno1
+                : config.turno2;
+        }
+
+        // ─── HELPERS DE TRACKING ────────────────────────────────────────────────
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function getFbc() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fbclid = urlParams.get('fbclid');
+            if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
+            return getCookie('_fbc') || null;
+        }
+
+        async function getClientIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                return data.ip || null;
+            } catch (e) {
+                return null;
             }
         }
 
+        // ─── CONSTRUIR LINK DE WHATSAPP AL HACER CLIC ──────────────────────────
+        async function buildWhatsappLink(event) {
+            event.preventDefault();
+
+            // Deshabilitar botón mientras se obtiene la IP
+            const btn = document.getElementById('whatsappBtn');
+            btn.classList.add('loading');
+
+            const currentConfig = getCurrentConfig();
+
+            // Recopilar los 4 datos de tracking
+            const fbp       = getCookie('_fbp') || null;
+            const fbc       = getFbc()           || null;
+            const ip        = await getClientIP();
+            const userAgent = navigator.userAgent || null;
+
+            // Armar bloque de verificación solo con los datos disponibles
+            const lines = [];
+            if (fbp)       lines.push('fbp: ' + fbp);
+            if (fbc)       lines.push('fbc: ' + fbc);
+            if (ip)        lines.push('ip: '  + ip);
+            if (userAgent) lines.push('ua: '  + userAgent);
+
+            const trackingBlock = lines.length > 0
+                ? '\n\n🔒 Código de verificación (no borrar):\n' + lines.join('\n')
+                : '';
+
+            const rawMessage =
+                '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.' +
+                trackingBlock;
+
+            const url = 'https://wa.me/' + currentConfig.phone + '?text=' + encodeURIComponent(rawMessage);
+            window.open(url, '_blank');
+
+            btn.classList.remove('loading');
+        }
+
+        // ─── ACTUALIZAR DATOS BANCARIOS Y HORARIO ──────────────────────────────
         function updatePageData() {
             const currentConfig = getCurrentConfig();
 
-            // ─── Construir mensaje con tracking ──────────────────────────────────
-            const tracking = getTrackingData();
-            const trackingParts = [];
-            if (tracking.fbp) trackingParts.push('fbp:' + tracking.fbp);
-            if (tracking.fbc) trackingParts.push('fbc:' + tracking.fbc);
-            const trackingLine = trackingParts.length > 0
-                ? '\n\n---\n' + trackingParts.join(' | ')
-                : '';
-
-            const rawMessage = '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.' + trackingLine;
-            const message = encodeURIComponent(rawMessage);
-
-            // ─── Actualizar botón WhatsApp ────────────────────────────────────────
-            const whatsappBtn = document.getElementById('whatsappBtn');
-            whatsappBtn.href = 'https://wa.me/' + currentConfig.phone + '?text=' + message;
-
             document.getElementById('attendantName').textContent = currentConfig.schedule;
 
-            // ─── Actualizar datos bancarios ───────────────────────────────────────
-            document.querySelector('[data-field="bank"]').textContent = currentConfig.bank;
-            document.querySelector('[data-field="bank"]').setAttribute('data-value', currentConfig.bank);
+            const fields = ['bank', 'titular', 'clabe', 'concepto'];
+            fields.forEach(field => {
+                const el = document.querySelector('[data-field="' + field + '"]');
+                if (el) {
+                    el.textContent = currentConfig[field];
+                    el.setAttribute('data-value', currentConfig[field]);
+                }
+            });
 
-            document.querySelector('[data-field="titular"]').textContent = currentConfig.titular;
-            document.querySelector('[data-field="titular"]').setAttribute('data-value', currentConfig.titular);
-
-            document.querySelector('[data-field="clabe"]').textContent = currentConfig.clabe;
-            document.querySelector('[data-field="clabe"]').setAttribute('data-value', currentConfig.clabe);
-
-            document.querySelector('[data-field="concepto"]').textContent = currentConfig.concepto;
-            document.querySelector('[data-field="concepto"]').setAttribute('data-value', currentConfig.concepto);
-
-            // ─── Botones de copiar ────────────────────────────────────────────────
             document.querySelectorAll('.copy-btn').forEach((btn, index) => {
-                const fields = ['bank', 'titular', 'clabe', 'concepto'];
                 const field = fields[index];
                 if (field) {
-                    btn.onclick = function(e) {
-                        copyText(currentConfig[field], e);
-                    };
+                    btn.onclick = function(e) { copyText(currentConfig[field], e); };
                 }
             });
         }
 
-        // Ejecutar al cargar
         updatePageData();
-
-        // Refrescar cada minuto por si cambia el turno
         setInterval(updatePageData, 60000);
 
+        // ─── COPIAR AL PORTAPAPELES ─────────────────────────────────────────────
         function copyText(text, event) {
             navigator.clipboard.writeText(text).then(function() {
                 const button = event.target;
@@ -595,21 +463,15 @@
                     button.textContent = 'Copiar';
                     button.classList.remove('copied');
                 }, 2000);
-            }).catch(function(err) {
-                console.error('Error al copiar: ', err);
+            }).catch(function() {
                 alert('Texto copiado: ' + text);
             });
         }
 
-        // Auto-copy al hacer clic en los valores bancarios
         document.querySelectorAll('.bank-value').forEach(element => {
             element.addEventListener('click', function() {
                 const text = this.getAttribute('data-value');
-                if (text) {
-                    navigator.clipboard.writeText(text).catch(function(err) {
-                        console.error('Error al copiar:', err);
-                    });
-                }
+                if (text) navigator.clipboard.writeText(text).catch(() => {});
             });
         });
     </script>
