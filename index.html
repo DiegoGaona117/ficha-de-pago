@@ -397,14 +397,6 @@
                     <span class="item-name">+125 Archivos 3D Editables</span>
                     <span class="item-price">Incluido</span>
                 </div>
-                <!--<div class="order-item">
-                    <span class="item-name"><strong>+BONUS</strong> Software SolidWorks 2025 Completo</span>
-                    <span class="item-price">Incluido</span>
-                </div>
-                <div class="order-item">
-                    <span class="item-name">+Video de instalación paso a paso</span>
-                    <span class="item-price">Incluido</span>
-                </div>-->
                 <div class="order-item">
                     <span class="item-name">Total a Pagar</span>
                     <span class="item-price">$50 MXN</span>
@@ -485,7 +477,33 @@
     </div>
 
     <script>
-        // Configuración de números de WhatsApp y datos bancarios según horario
+        // ─── TRACKING: leer fbp y fbclid ───────────────────────────────────────
+        function getTrackingData() {
+            // Leer una cookie por nombre
+            function getCookie(name) {
+                const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? decodeURIComponent(match[2]) : null;
+            }
+
+            // Intentar obtener fbclid: primero de la URL, luego del cookie _fbc
+            function getFbc() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const fbclid = urlParams.get('fbclid');
+                if (fbclid) {
+                    // Construir formato estándar de fbc: fb.1.<timestamp>.<fbclid>
+                    return 'fb.1.' + Date.now() + '.' + fbclid;
+                }
+                // Si ya existe el cookie _fbc (lo genera el Pixel automáticamente)
+                return getCookie('_fbc') || null;
+            }
+
+            return {
+                fbp: getCookie('_fbp') || null,   // generado por el Pixel en esta misma página
+                fbc: getFbc() || null              // viene del clic en el anuncio
+            };
+        }
+
+        // ─── CONFIGURACIÓN DE TURNOS ────────────────────────────────────────────
         const config = {
             turno1: { // 3 PM a 3 AM
                 phone: '5214621579719',
@@ -506,12 +524,9 @@
         };
 
         function getCurrentConfig() {
-            // Obtener hora actual en Ciudad de México
             const now = new Date();
             const mexicoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Mexico_City' }));
             const hour = mexicoTime.getHours();
-            
-            // De 15 (3 PM) a 23 (11 PM) del mismo día, o de 0 (12 AM) a 3 (3 AM) del día siguiente
             if ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3)) {
                 return config.turno1;
             } else {
@@ -521,43 +536,54 @@
 
         function updatePageData() {
             const currentConfig = getCurrentConfig();
-            
-            // Actualizar WhatsApp
+
+            // ─── Construir mensaje con tracking ──────────────────────────────────
+            const tracking = getTrackingData();
+            const trackingParts = [];
+            if (tracking.fbp) trackingParts.push('fbp:' + tracking.fbp);
+            if (tracking.fbc) trackingParts.push('fbc:' + tracking.fbc);
+            const trackingLine = trackingParts.length > 0
+                ? '\n\n---\n' + trackingParts.join(' | ')
+                : '';
+
+            const rawMessage = '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.' + trackingLine;
+            const message = encodeURIComponent(rawMessage);
+
+            // ─── Actualizar botón WhatsApp ────────────────────────────────────────
             const whatsappBtn = document.getElementById('whatsappBtn');
-            const attendantName = document.getElementById('attendantName');
-            const message = encodeURIComponent('¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.');
-            whatsappBtn.href = `https://wa.me/${currentConfig.phone}?text=${message}`;
-            attendantName.textContent = currentConfig.schedule;
-            
-            // Actualizar datos bancarios
+            whatsappBtn.href = 'https://wa.me/' + currentConfig.phone + '?text=' + message;
+
+            document.getElementById('attendantName').textContent = currentConfig.schedule;
+
+            // ─── Actualizar datos bancarios ───────────────────────────────────────
             document.querySelector('[data-field="bank"]').textContent = currentConfig.bank;
             document.querySelector('[data-field="bank"]').setAttribute('data-value', currentConfig.bank);
-            
+
             document.querySelector('[data-field="titular"]').textContent = currentConfig.titular;
             document.querySelector('[data-field="titular"]').setAttribute('data-value', currentConfig.titular);
-            
+
             document.querySelector('[data-field="clabe"]').textContent = currentConfig.clabe;
             document.querySelector('[data-field="clabe"]').setAttribute('data-value', currentConfig.clabe);
-            
+
             document.querySelector('[data-field="concepto"]').textContent = currentConfig.concepto;
             document.querySelector('[data-field="concepto"]').setAttribute('data-value', currentConfig.concepto);
-            
-            // Actualizar botones de copiar
+
+            // ─── Botones de copiar ────────────────────────────────────────────────
             document.querySelectorAll('.copy-btn').forEach((btn, index) => {
                 const fields = ['bank', 'titular', 'clabe', 'concepto'];
                 const field = fields[index];
                 if (field) {
-                    btn.onclick = function(e) { 
-                        copyText(currentConfig[field], e); 
+                    btn.onclick = function(e) {
+                        copyText(currentConfig[field], e);
                     };
                 }
             });
         }
 
-        // Actualizar al cargar la página
+        // Ejecutar al cargar
         updatePageData();
 
-        // Actualizar cada minuto por si cambia el horario
+        // Refrescar cada minuto por si cambia el turno
         setInterval(updatePageData, 60000);
 
         function copyText(text, event) {
@@ -565,7 +591,6 @@
                 const button = event.target;
                 button.textContent = '¡Copiado!';
                 button.classList.add('copied');
-                
                 setTimeout(function() {
                     button.textContent = 'Copiar';
                     button.classList.remove('copied');
@@ -576,14 +601,12 @@
             });
         }
 
-        // Auto-copy cuando se hace clic en los valores bancarios
+        // Auto-copy al hacer clic en los valores bancarios
         document.querySelectorAll('.bank-value').forEach(element => {
-            element.addEventListener('click', function(e) {
+            element.addEventListener('click', function() {
                 const text = this.getAttribute('data-value');
                 if (text) {
-                    navigator.clipboard.writeText(text).then(function() {
-                        console.log('Texto copiado: ' + text);
-                    }).catch(function(err) {
+                    navigator.clipboard.writeText(text).catch(function(err) {
                         console.error('Error al copiar:', err);
                     });
                 }
