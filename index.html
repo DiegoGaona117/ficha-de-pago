@@ -452,6 +452,17 @@
                 body: JSON.stringify(payload)
             }).catch(() => {});
 
+            // ─── DISPARAR EVENTO PURCHASE EN EL PIXEL DE META ──────────────────
+            if (typeof fbq === 'function') {
+                fbq('track', 'Purchase', {
+                    value:        50,
+                    currency:     'MXN',
+                    order_id:     orderCode,
+                }, {
+                    eventID: orderCode
+                });
+            }
+
             const rawMessage =
                 '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.\n\n' +
                 'Código de pedido: ' + orderCode;
