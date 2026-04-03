@@ -432,35 +432,42 @@
             const ip        = await getClientIP();
             const userAgent = navigator.userAgent || null;
 
-            // Payload para Make
-            const payload = {
-                order_code:  orderCode,
-                timestamp:   new Date().toISOString(),
-                producto:    'Paquete Planos 200',
-                valor:       50,
-                moneda:      'MXN',
-                fbp:         fbp,
-                fbc:         fbc,
-                client_ip:   ip,
-                client_user_agent: userAgent,
-            };
+            // ─── SOLO ENVIAR WEBHOOK Y PIXEL UNA VEZ ───────────────────────────
+            const yaEnviado = localStorage.getItem('webhook_enviado');
+            if (!yaEnviado) {
+                // Payload para Make
+                const payload = {
+                    order_code:  orderCode,
+                    timestamp:   new Date().toISOString(),
+                    producto:    'Paquete Planos 200',
+                    valor:       50,
+                    moneda:      'MXN',
+                    fbp:         fbp,
+                    fbc:         fbc,
+                    client_ip:   ip,
+                    client_user_agent: userAgent,
+                };
 
-            // Enviar a Make en segundo plano (sin bloquear)
-            fetch(MAKE_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(() => {});
+                // Enviar a Make en segundo plano (sin bloquear)
+                fetch(MAKE_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).catch(() => {});
 
-            // ─── DISPARAR EVENTO PURCHASE EN EL PIXEL DE META ──────────────────
-            if (typeof fbq === 'function') {
-                fbq('track', 'Purchase', {
-                    value:        50,
-                    currency:     'MXN',
-                    order_id:     orderCode,
-                }, {
-                    eventID: orderCode
-                });
+                // ─── DISPARAR EVENTO PURCHASE EN EL PIXEL DE META ──────────────
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase', {
+                        value:    50,
+                        currency: 'MXN',
+                        order_id: orderCode,
+                    }, {
+                        eventID: orderCode
+                    });
+                }
+
+                // Marcar como enviado para no repetir
+                localStorage.setItem('webhook_enviado', 'true');
             }
 
             const rawMessage =
