@@ -192,65 +192,6 @@
         .instructions ol { padding-left: 1.5rem; color: var(--gray-700); line-height: 1.6; }
         .instructions li { margin-bottom: 0.5rem; }
 
-        /* ── Campos del formulario ── */
-        .contact-section {
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--gray-700);
-            margin-bottom: 0.4rem;
-        }
-
-        .form-label span {
-            color: var(--error);
-            margin-left: 2px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            color: var(--gray-800);
-            background: var(--white);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
-        }
-
-        .form-input.error {
-            border-color: var(--error);
-        }
-
-        .form-hint {
-            font-size: 0.75rem;
-            color: var(--gray-600);
-            margin-top: 0.3rem;
-        }
-
-        .form-error {
-            font-size: 0.75rem;
-            color: var(--error);
-            margin-top: 0.3rem;
-            display: none;
-        }
-
-        .form-error.visible { display: block; }
-
         /* ── Botón WhatsApp ── */
         .whatsapp-section { text-align: center; }
 
@@ -371,35 +312,13 @@
                 <ol>
                     <li>Realiza la transferencia por <strong>$50 MXN</strong> a la cuenta mostrada arriba</li>
                     <li>Toma una captura de pantalla del comprobante de transferencia</li>
-                    <li>Llena tu nombre y correo Gmail</li>
                     <li>Haz clic en el botón de WhatsApp para enviarnos tu comprobante</li>
                     <li>Recibirás tu paquete completo en menos de 2 horas</li>
                     <li><strong>✅ Garantía:</strong> Si el contenido no es lo que esperabas, solicita tu reembolso completo</li>
                 </ol>
             </div>
 
-            <!-- Campos de contacto -->
-            <div class="contact-section">
-                <h2 class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                    </svg>
-                    Tus Datos de Contacto
-                </h2>
 
-                <div class="form-group">
-                    <label class="form-label" for="clientName">Nombre completo <span>*</span></label>
-                    <input class="form-input" type="text" id="clientName" placeholder="Ej: Juan Pérez" autocomplete="name" />
-                    <p class="form-error" id="nameError">Por favor ingresa tu nombre</p>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="clientEmail">Correo electrónico <span>*</span></label>
-                    <input class="form-input" type="email" id="clientEmail" placeholder="Ej: juan@gmail.com" autocomplete="email" />
-                    <p class="form-hint">Debe ser un correo Gmail para poder acceder a Google Drive</p>
-                    <p class="form-error" id="emailError">Necesitas un correo Gmail (@gmail.com) para acceder a los archivos en Google Drive</p>
-                </div>
-            </div>
 
             <div class="whatsapp-section">
                 <a href="#"
@@ -426,12 +345,6 @@
     <script>
         // ─── WEBHOOK DE MAKE ────────────────────────────────────────────────────
         const MAKE_WEBHOOK = 'https://hook.us1.make.com/fyli8y7tmxu6mtqf7byp9vy2g3cji3wa';
-
-        // ─── DOMINIOS PERMITIDOS (solo Gmail para acceso a Google Drive) ─────
-        const ALLOWED_DOMAINS = [
-            'gmail.com',
-            'googlemail.com'
-        ];
 
         // ─── CONFIGURACIÓN DE TURNOS ────────────────────────────────────────────
         const config = {
@@ -482,18 +395,6 @@
             } catch (e) { return null; }
         }
 
-        // ─── HASH SHA-256 (para email y nombre) ────────────────────────────────
-        async function sha256(str) {
-            if (!str) return null;
-            const buffer = await crypto.subtle.digest(
-                'SHA-256',
-                new TextEncoder().encode(str.trim().toLowerCase())
-            );
-            return Array.from(new Uint8Array(buffer))
-                .map(b => b.toString(16).padStart(2, '0'))
-                .join('');
-        }
-
         // ─── GENERAR CÓDIGO DE PEDIDO ───────────────────────────────────────────
         function generateOrderCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -504,44 +405,9 @@
             return code;
         }
 
-        // ─── VALIDACIÓN DEL FORMULARIO ──────────────────────────────────────────
-        function validateForm() {
-            const name  = document.getElementById('clientName').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-            let valid = true;
-
-            // Nombre
-            if (!name) {
-                document.getElementById('clientName').classList.add('error');
-                document.getElementById('nameError').classList.add('visible');
-                valid = false;
-            } else {
-                document.getElementById('clientName').classList.remove('error');
-                document.getElementById('nameError').classList.remove('visible');
-            }
-
-            // Email — formato válido + dominio permitido para Google Drive
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const emailDomain = email.split('@')[1]?.toLowerCase();
-            const isDomainAllowed = ALLOWED_DOMAINS.includes(emailDomain);
-
-            if (!email || !emailRegex.test(email) || !isDomainAllowed) {
-                document.getElementById('clientEmail').classList.add('error');
-                document.getElementById('emailError').classList.add('visible');
-                valid = false;
-            } else {
-                document.getElementById('clientEmail').classList.remove('error');
-                document.getElementById('emailError').classList.remove('visible');
-            }
-
-            return valid;
-        }
-
         // ─── CONSTRUIR LINK DE WHATSAPP Y DISPARAR WEBHOOK ─────────────────────
         async function buildWhatsappLink(event) {
             event.preventDefault();
-
-            if (!validateForm()) return;
 
             const btn = document.getElementById('whatsappBtn');
             btn.classList.add('loading');
@@ -549,42 +415,19 @@
             const currentConfig = getCurrentConfig();
             const orderCode = generateOrderCode();
 
-            // Datos del cliente
-            const name  = document.getElementById('clientName').value.trim();
-            const email = document.getElementById('clientEmail').value.trim();
-
             // Tracking del navegador
             const fbp       = getCookie('_fbp') || null;
             const fbc       = getFbc()           || null;
             const ip        = await getClientIP();
             const userAgent = navigator.userAgent || null;
 
-            // Hash de PII para Meta
-            const emailHash = await sha256(email);
-            const nameHash  = await sha256(name);
-
-            // Separar nombre y apellido para Meta (si hay espacio)
-            const nameParts  = name.split(' ');
-            const firstName  = nameParts[0] || '';
-            const lastName   = nameParts.slice(1).join(' ') || '';
-            const fnHash     = await sha256(firstName);
-            const lnHash     = await sha256(lastName);
-
-            // Payload completo para Make
+            // Payload para Make
             const payload = {
                 order_code:  orderCode,
                 timestamp:   new Date().toISOString(),
                 producto:    'Paquete Planos 200',
                 valor:       50,
                 moneda:      'MXN',
-                // Datos del cliente (sin hash, para tu uso interno)
-                nombre:      name,
-                email:       email,
-                // Datos hasheados para CAPI de Meta
-                em:          emailHash,
-                fn:          fnHash,
-                ln:          lnHash,
-                // Tracking de navegador
                 fbp:         fbp,
                 fbc:         fbc,
                 client_ip:   ip,
@@ -596,9 +439,8 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
-            }).catch(() => {}); // silencioso si falla
+            }).catch(() => {});
 
-            // Mensaje limpio para WhatsApp — solo el código de pedido
             const rawMessage =
                 '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.\n\n' +
                 'Código de pedido: ' + orderCode;
@@ -652,15 +494,6 @@
             });
         });
 
-        // Limpiar error al escribir
-        document.getElementById('clientName').addEventListener('input', function() {
-            this.classList.remove('error');
-            document.getElementById('nameError').classList.remove('visible');
-        });
-        document.getElementById('clientEmail').addEventListener('input', function() {
-            this.classList.remove('error');
-            document.getElementById('emailError').classList.remove('visible');
-        });
     </script>
 </body>
 </html>
