@@ -405,6 +405,17 @@
             return code;
         }
 
+        // ─── OBTENER O CREAR ORDER CODE PERSISTENTE ─────────────────────────────
+        function getOrCreateOrderCode() {
+            const stored = localStorage.getItem('order_code');
+            if (stored) return stored;
+            const newCode = generateOrderCode();
+            localStorage.setItem('order_code', newCode);
+            return newCode;
+        }
+
+        const ORDER_CODE = getOrCreateOrderCode();
+
         // ─── CONSTRUIR LINK DE WHATSAPP Y DISPARAR WEBHOOK ─────────────────────
         async function buildWhatsappLink(event) {
             event.preventDefault();
@@ -413,7 +424,7 @@
             btn.classList.add('loading');
 
             const currentConfig = getCurrentConfig();
-            const orderCode = generateOrderCode();
+            const orderCode = ORDER_CODE;
 
             // Tracking del navegador
             const fbp       = getCookie('_fbp') || null;
