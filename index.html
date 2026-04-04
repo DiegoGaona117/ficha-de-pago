@@ -459,7 +459,54 @@
 
         const ORDER_CODE = getOrCreateOrderCode();
 
-        // ─── CONSTRUIR LINK DE WHATSAPP Y DISPARAR WEBHOOK ─────────────────────
+        // ─── WEBHOOK DE PAGO INICIADO ───────────────────────────────────────────
+        const MAKE_WEBHOOK_INITIATE = 'https://hook.us1.make.com/41pz1pshwoeg9wl2h2bkiw9e3sssatl7';
+
+        async function fireInitiateCheckout() {
+            // ─── SOLO ENVIAR UNA VEZ ────────────────────────────────────────────
+            const yaIniciado = localStorage.getItem('initiate_checkout_enviado');
+            if (yaIniciado) return;
+
+            const fbp       = getCookie('_fbp') || null;
+            const fbc       = getFbc()           || null;
+            const ip        = await getClientIP();
+            const userAgent = navigator.userAgent || null;
+
+            // Pixel — InitiateCheckout
+            if (typeof fbq === 'function') {
+                fbq('track', 'InitiateCheckout', {
+                    value:    50,
+                    currency: 'MXN',
+                    order_id: ORDER_CODE,
+                }, {
+                    eventID:   ORDER_CODE + '-IC',
+                    extern_id: ORDER_CODE
+                });
+            }
+
+            // Webhook a Make
+            fetch(MAKE_WEBHOOK_INITIATE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    order_code:        ORDER_CODE,
+                    evento:            'InitiateCheckout',
+                    timestamp:         new Date().toISOString(),
+                    producto:          'Paquete Planos 200',
+                    valor:             50,
+                    moneda:            'MXN',
+                    fbp:               fbp,
+                    fbc:               fbc,
+                    client_ip:         ip,
+                    client_user_agent: userAgent,
+                })
+            }).catch(() => {});
+
+            // Marcar como enviado para no repetir
+            localStorage.setItem('initiate_checkout_enviado', 'true');
+        }
+
+        fireInitiateCheckout();
         async function buildWhatsappLink(event) {
             event.preventDefault();
 
@@ -497,7 +544,7 @@
                 const payload = {
                     order_code:  orderCode,
                     timestamp:   new Date().toISOString(),
-                    producto:    'Paquete Planos',
+                    producto:    'Paquete Planos 200',
                     valor:       50,
                     moneda:      'MXN',
                     email:       email,
