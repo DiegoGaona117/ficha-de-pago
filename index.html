@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Compra - Diego Gaona</title>
-
-     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧾</text></svg>">
-
-    <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -21,11 +17,7 @@
     fbq('init', '373277814132384');
     fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"
-    /></noscript>
-
-    <!-- Google Analytics -->
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"/></noscript>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RN68VLQLTW"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -33,208 +25,55 @@
       gtag('js', new Date());
       gtag('config', 'G-RN68VLQLTW');
     </script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --success: #10b981;
-            --error: #ef4444;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --gray-900: #0f172a;
-            --white: #ffffff;
-            --border-radius: 12px;
-            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --primary: #2563eb; --primary-dark: #1d4ed8; --success: #10b981; --error: #ef4444;
+            --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+            --gray-600: #475569; --gray-700: #334155; --gray-800: #1e293b; --gray-900: #0f172a;
+            --white: #ffffff; --border-radius: 12px;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-800);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1rem;
-        }
-
-        .checkout-container {
-            max-width: 600px;
-            width: 100%;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            padding: 2rem;
-            text-align: center;
-        }
-
+        body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+        .checkout-container { max-width: 600px; width: 100%; background: var(--white); border-radius: var(--border-radius); box-shadow: var(--shadow-lg); overflow: hidden; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 2rem; text-align: center; }
         .header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .header p { opacity: 0.9; font-size: 1rem; }
         .content { padding: 2rem; }
-
-        .order-summary {
-            background: var(--gray-50);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--gray-200);
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .order-item:last-child {
-            margin-bottom: 0;
-            padding-top: 1rem;
-            border-top: 2px solid var(--gray-200);
-            font-weight: 600;
-            font-size: 1.125rem;
-        }
-
+        .order-summary { background: var(--gray-50); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--gray-200); }
+        .order-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .order-item:last-child { margin-bottom: 0; padding-top: 1rem; border-top: 2px solid var(--gray-200); font-weight: 600; font-size: 1.125rem; }
         .item-name { font-weight: 500; color: var(--gray-700); }
         .item-price { font-weight: 600; color: var(--gray-900); }
         .payment-section { margin-bottom: 2rem; }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .bank-info {
-            background: var(--white);
-            border: 2px solid var(--primary);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .bank-detail {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
+        .section-title { font-size: 1.25rem; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .bank-info { background: var(--white); border: 2px solid var(--primary); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .bank-detail { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gray-200); }
         .bank-detail:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
         .bank-label { font-weight: 500; color: var(--gray-600); font-size: 0.875rem; }
-
-        .bank-value-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .bank-value {
-            font-weight: 600;
-            color: var(--gray-900);
-            font-family: monospace;
-            font-size: 0.95rem;
-            cursor: pointer;
-            word-break: keep-all;
-            overflow-wrap: break-word;
-            flex: 1;
-            min-width: 0;
-            line-height: 1.4;
-        }
-
-        .copy-btn {
-            background: var(--gray-100);
-            border: 1px solid var(--gray-300);
-            border-radius: 6px;
-            padding: 0.4rem 0.75rem;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
+        .bank-value-wrapper { display: flex; align-items: center; gap: 0.5rem; width: 100%; flex-wrap: wrap; }
+        .bank-value { font-weight: 600; color: var(--gray-900); font-family: monospace; font-size: 0.95rem; cursor: pointer; flex: 1; min-width: 0; line-height: 1.4; }
+        .copy-btn { background: var(--gray-100); border: 1px solid var(--gray-300); border-radius: 6px; padding: 0.4rem 0.75rem; font-size: 0.75rem; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; }
         .copy-btn:hover { background: var(--gray-200); }
         .copy-btn.copied { background: var(--success); color: var(--white); }
-
-        .instructions {
-            background: var(--gray-50);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--primary);
-        }
-
+        .instructions { background: var(--gray-50); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 2rem; border-left: 4px solid var(--primary); }
         .instructions h3 { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); margin-bottom: 1rem; }
         .instructions ol { padding-left: 1.5rem; color: var(--gray-700); line-height: 1.6; }
         .instructions li { margin-bottom: 0.5rem; }
-
         .whatsapp-section { text-align: center; }
-
-        .whatsapp-btn {
-            background: #25d366;
-            color: var(--white);
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1.125rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: var(--shadow);
-        }
-
+        .whatsapp-btn { background: #25d366; color: var(--white); padding: 1rem 2rem; border: none; border-radius: var(--border-radius); font-size: 1.125rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 0.75rem; box-shadow: var(--shadow); }
         .whatsapp-btn:hover { background: #22c55e; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
         .whatsapp-btn.loading { opacity: 0.7; pointer-events: none; cursor: not-allowed; transform: none; }
         .whatsapp-icon { width: 24px; height: 24px; fill: currentColor; }
-
-        .support-text {
-            margin-top: 1.5rem;
-            color: var(--gray-600);
-            font-size: 0.875rem;
-            text-align: center;
-        }
-
+        .support-text { margin-top: 1.5rem; color: var(--gray-600); font-size: 0.875rem; text-align: center; }
         @media (max-width: 640px) {
             body { padding: 1rem 0.5rem; }
             .checkout-container { margin: 0; }
             .header, .content { padding: 1.5rem; }
             .header h1 { font-size: 1.5rem; }
-            .header p { font-size: 0.875rem; }
             .order-summary { padding: 1rem; }
             .order-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; margin-bottom: 0.75rem; }
-            .item-name { font-size: 0.875rem; }
-            .item-price { font-size: 0.875rem; }
+            .item-name, .item-price { font-size: 0.875rem; }
             .bank-info { padding: 1rem; }
             .bank-value { font-size: 0.875rem; }
             .copy-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
@@ -247,67 +86,25 @@
 </head>
 <body>
     <div class="checkout-container">
-        <div class="header">
-            <h1>Finalizar Compra</h1>
-        </div>
-        
+        <div class="header"><h1>Finalizar Compra</h1></div>
         <div class="content">
             <div class="order-summary">
-                <div class="order-item">
-                    <span class="item-name">+200 Planos PDF Profesionales</span>
-                    <span class="item-price">Incluido</span>
-                </div>
-                <div class="order-item">
-                    <span class="item-name">+125 Archivos 3D Editables</span>
-                    <span class="item-price">Incluido</span>
-                </div>
-                <div class="order-item">
-                    <span class="item-name">Total a Pagar</span>
-                    <span class="item-price">$50 MXN</span>
-                    <span class="item-price">🔥 por tiempo limitado</span>
-                </div>
+                <div class="order-item"><span class="item-name">+200 Planos PDF Profesionales</span><span class="item-price">Incluido</span></div>
+                <div class="order-item"><span class="item-name">+125 Archivos 3D Editables</span><span class="item-price">Incluido</span></div>
+                <div class="order-item"><span class="item-name">Total a Pagar</span><span class="item-price">$50 MXN</span><span class="item-price">🔥 por tiempo limitado</span></div>
             </div>
-
             <div class="payment-section">
                 <h2 class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                     Datos para Transferencia
                 </h2>
-                
                 <div class="bank-info">
-                    <div class="bank-detail">
-                        <span class="bank-label">Banco:</span>
-                        <div class="bank-value-wrapper">
-                            <span class="bank-value" data-field="bank" data-value="BBVA México">BBVA México</span>
-                            <button class="copy-btn" aria-label="Copiar nombre del banco">Copiar</button>
-                        </div>
-                    </div>
-                    <div class="bank-detail">
-                        <span class="bank-label">Titular:</span>
-                        <div class="bank-value-wrapper">
-                            <span class="bank-value" data-field="titular" data-value="Diego Armando Gaona Ramírez">Diego Armando Gaona Ramírez</span>
-                            <button class="copy-btn" aria-label="Copiar nombre del titular">Copiar</button>
-                        </div>
-                    </div>
-                    <div class="bank-detail">
-                        <span class="bank-label">CLABE:</span>
-                        <div class="bank-value-wrapper">
-                            <span class="bank-value" data-field="clabe" data-value="012210028972966223">012210028972966223</span>
-                            <button class="copy-btn" aria-label="Copiar CLABE">Copiar</button>
-                        </div>
-                    </div>
-                    <div class="bank-detail">
-                        <span class="bank-label">Concepto:</span>
-                        <div class="bank-value-wrapper">
-                            <span class="bank-value" data-field="concepto" data-value="Paquete de Planos">Paquete de Planos</span>
-                            <button class="copy-btn" aria-label="Copiar concepto">Copiar</button>
-                        </div>
-                    </div>
+                    <div class="bank-detail"><span class="bank-label">Banco:</span><div class="bank-value-wrapper"><span class="bank-value" data-field="bank" data-value="BBVA México">BBVA México</span><button class="copy-btn">Copiar</button></div></div>
+                    <div class="bank-detail"><span class="bank-label">Titular:</span><div class="bank-value-wrapper"><span class="bank-value" data-field="titular" data-value="Diego Armando Gaona Ramírez">Diego Armando Gaona Ramírez</span><button class="copy-btn">Copiar</button></div></div>
+                    <div class="bank-detail"><span class="bank-label">CLABE:</span><div class="bank-value-wrapper"><span class="bank-value" data-field="clabe" data-value="012210028972966223">012210028972966223</span><button class="copy-btn">Copiar</button></div></div>
+                    <div class="bank-detail"><span class="bank-label">Concepto:</span><div class="bank-value-wrapper"><span class="bank-value" data-field="concepto" data-value="Paquete de Planos">Paquete de Planos</span><button class="copy-btn">Copiar</button></div></div>
                 </div>
             </div>
-
             <div class="instructions">
                 <h3>Instrucciones de Pago</h3>
                 <ol>
@@ -317,89 +114,64 @@
                     <li><strong>✅ Garantía:</strong> Si el contenido no es lo que esperabas, solicita tu reembolso completo</li>
                 </ol>
             </div>
-
             <div class="whatsapp-section">
-                <a href="#"
-                   id="whatsappBtn"
-                   class="whatsapp-btn"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="Enviar comprobante por WhatsApp"
-                   onclick="buildWhatsappLink(event)">
-                    <svg class="whatsapp-icon" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.63"/>
-                    </svg>
+                <a href="#" id="whatsappBtn" class="whatsapp-btn" target="_blank" rel="noopener noreferrer" onclick="buildWhatsappLink(event)">
+                    <svg class="whatsapp-icon" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.63"/></svg>
                     Enviar Comprobante por WhatsApp
                 </a>
-                
-                <p class="support-text" id="scheduleText">
-                    ¿Tienes alguna duda? Contáctanos por WhatsApp<br>
-                    <span id="attendantName"></span>
-                </p>
+                <p class="support-text" id="scheduleText">¿Tienes alguna duda? Contáctanos por WhatsApp<br><span id="attendantName"></span></p>
             </div>
         </div>
     </div>
 
     <script>
-        // ─── WEBHOOK ÚNICO ──────────────────────────────────────────────────────
         const MAKE_WEBHOOK = 'https://hook.us1.make.com/fyli8y7tmxu6mtqf7byp9vy2g3cji3wa';
 
-        // ─── CONFIGURACIÓN DE TURNOS ────────────────────────────────────────────
         const config = {
-            turno1: {
-                phone: '5214621579719',
-                schedule: 'Horario de atención: 9:00 AM - 11:00 PM',
-                bank: 'BBVA México',
-                titular: 'Diego Armando Gaona Ramírez',
-                clabe: '012210028972966223',
-                concepto: 'Paquete de Planos'
-            },
-            turno2: {
-                phone: '5214622856400',
-                schedule: 'Horario de atención: 9:00 AM - 11:00 PM',
-                bank: 'BBVA México',
-                titular: 'Pablo Alberto Gaona Ramírez',
-                clabe: '012180015336316989',
-                concepto: 'Paquete de Planos'
-            }
+            turno1: { phone: '5214621579719', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Diego Armando Gaona Ramírez', clabe: '012210028972966223', concepto: 'Paquete de Planos' },
+            turno2: { phone: '5214622856400', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Pablo Alberto Gaona Ramírez', clabe: '012180015336316989', concepto: 'Paquete de Planos' }
         };
 
         function getCurrentConfig() {
-            const now = new Date();
-            const mexicoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Mexico_City' }));
-            const hour = mexicoTime.getHours();
-            return ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3))
-                ? config.turno1 : config.turno2;
+            const hour = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Mexico_City' })).getHours();
+            return ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3)) ? config.turno1 : config.turno2;
         }
 
-        // ─── HELPERS DE TRACKING ────────────────────────────────────────────────
         function getCookie(name) {
             const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             return match ? decodeURIComponent(match[2]) : null;
         }
 
         function getFbc() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const fbclid = urlParams.get('fbclid');
+            const fbclid = new URLSearchParams(window.location.search).get('fbclid');
             if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
             return getCookie('_fbc') || null;
         }
 
-        async function getClientIP() {
+        // ─── GEOLOCALIZACIÓN POR IP ─────────────────────────────────────────────
+        async function getGeoData() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
+                const res  = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
-                return data.ip || null;
-            } catch (e) { return null; }
+                return {
+                    client_ip:     data.ip           || null,
+                    geo_ciudad:    data.city          || null,
+                    geo_region:    data.region        || null,
+                    geo_pais:      data.country_name  || null,
+                    geo_pais_code: data.country       || null,
+                    geo_cp:        data.postal        || null,
+                    geo_lat:       data.latitude      || null,
+                    geo_lng:       data.longitude     || null,
+                };
+            } catch (e) {
+                return { client_ip: null, geo_ciudad: null, geo_region: null, geo_pais: null, geo_pais_code: null, geo_cp: null, geo_lat: null, geo_lng: null };
+            }
         }
 
-        // ─── GENERAR CÓDIGO DE PEDIDO ───────────────────────────────────────────
         function generateOrderCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = 'PL-';
-            for (let i = 0; i < 5; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
             return code;
         }
 
@@ -415,39 +187,27 @@
 
         // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
         async function fireInitiateCheckout() {
-            const yaIniciado = localStorage.getItem('initiate_checkout_enviado');
-            if (yaIniciado) return;
+            if (localStorage.getItem('initiate_checkout_enviado')) return;
 
-            const fbp       = getCookie('_fbp') || null;
-            const fbc       = getFbc()           || null;
-            const ip        = await getClientIP();
-            const userAgent = navigator.userAgent || null;
+            const fbp = getCookie('_fbp') || null;
+            const fbc = getFbc();
+            const geo = await getGeoData();
 
             if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout', {
-                    value:    50,
-                    currency: 'MXN',
-                    order_id: ORDER_CODE,
-                }, {
-                    eventID:   ORDER_CODE + '-IC',
-                    extern_id: ORDER_CODE
-                });
+                fbq('track', 'InitiateCheckout', { value: 50, currency: 'MXN', order_id: ORDER_CODE }, { eventID: ORDER_CODE + '-IC', extern_id: ORDER_CODE });
             }
 
             fetch(MAKE_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    evento:            'InitiateCheckout',
-                    order_code:        ORDER_CODE,
-                    timestamp:         new Date().toISOString(),
-                    producto:          'Paquete Planos',
-                    valor:             50,
-                    moneda:            'MXN',
-                    fbp:               fbp,
-                    fbc:               fbc,
-                    client_ip:         ip,
-                    client_user_agent: userAgent,
+                    evento: 'InitiateCheckout', order_code: ORDER_CODE,
+                    timestamp: new Date().toISOString(), producto: 'Paquete Planos',
+                    valor: 50, moneda: 'MXN', fbp, fbc,
+                    client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
+                    geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
+                    geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
+                    geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
                 })
             }).catch(() => {});
 
@@ -464,42 +224,30 @@
             btn.classList.add('loading');
 
             const currentConfig = getCurrentConfig();
-            const orderCode = ORDER_CODE;
+            const fbp = getCookie('_fbp') || null;
+            const fbc = getFbc();
+            const geo = await getGeoData();
 
-            const fbp       = getCookie('_fbp') || null;
-            const fbc       = getFbc()           || null;
-            const ip        = await getClientIP();
-            const userAgent = navigator.userAgent || null;
-
-            const yaEnviado = localStorage.getItem('webhook_enviado');
-            if (!yaEnviado) {
+            if (!localStorage.getItem('webhook_enviado')) {
                 fetch(MAKE_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        evento:            'Purchase',
-                        order_code:        orderCode,
-                        timestamp:         new Date().toISOString(),
-                        producto:          'Paquete Planos',
-                        valor:             50,
-                        moneda:            'MXN',
-                        fbp:               fbp,
-                        fbc:               fbc,
-                        client_ip:         ip,
-                        client_user_agent: userAgent,
+                        evento: 'Purchase', order_code: ORDER_CODE,
+                        timestamp: new Date().toISOString(), producto: 'Paquete Planos',
+                        valor: 50, moneda: 'MXN', fbp, fbc,
+                        client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
+                        geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
+                        geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
+                        geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
                     })
                 }).catch(() => {});
 
                 localStorage.setItem('webhook_enviado', 'true');
             }
 
-            const rawMessage =
-                '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.\n\n' +
-                'Código de pedido: ' + orderCode;
-
-            const url = 'https://wa.me/' + currentConfig.phone + '?text=' + encodeURIComponent(rawMessage);
-            window.open(url, '_blank');
-
+            const rawMessage = '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.\n\nCódigo de pedido: ' + ORDER_CODE;
+            window.open('https://wa.me/' + currentConfig.phone + '?text=' + encodeURIComponent(rawMessage), '_blank');
             btn.classList.remove('loading');
         }
 
@@ -507,16 +255,11 @@
         function updatePageData() {
             const currentConfig = getCurrentConfig();
             document.getElementById('attendantName').textContent = currentConfig.schedule;
-
             const fields = ['bank', 'titular', 'clabe', 'concepto'];
             fields.forEach(field => {
                 const el = document.querySelector('[data-field="' + field + '"]');
-                if (el) {
-                    el.textContent = currentConfig[field];
-                    el.setAttribute('data-value', currentConfig[field]);
-                }
+                if (el) { el.textContent = currentConfig[field]; el.setAttribute('data-value', currentConfig[field]); }
             });
-
             document.querySelectorAll('.copy-btn').forEach((btn, index) => {
                 const field = fields[index];
                 if (field) btn.onclick = function(e) { copyText(currentConfig[field], e); };
@@ -526,16 +269,12 @@
         updatePageData();
         setInterval(updatePageData, 60000);
 
-        // ─── COPIAR AL PORTAPAPELES ─────────────────────────────────────────────
         function copyText(text, event) {
             navigator.clipboard.writeText(text).then(function() {
                 const button = event.target;
                 button.textContent = '¡Copiado!';
                 button.classList.add('copied');
-                setTimeout(function() {
-                    button.textContent = 'Copiar';
-                    button.classList.remove('copied');
-                }, 2000);
+                setTimeout(function() { button.textContent = 'Copiar'; button.classList.remove('copied'); }, 2000);
             }).catch(function() { alert('Texto copiado: ' + text); });
         }
 
@@ -545,7 +284,6 @@
                 if (text) navigator.clipboard.writeText(text).catch(() => {});
             });
         });
-
     </script>
 </body>
 </html>
