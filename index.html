@@ -547,16 +547,7 @@
                     })
                 }).catch(() => {});
 
-                if (typeof fbq === 'function') {
-                    fbq('track', 'Purchase', {
-                        value:    50,
-                        currency: 'MXN',
-                        order_id: orderCode,
-                    }, {
-                        eventID:   orderCode,
-                        extern_id: orderCode
-                    });
-                }
+                
 
                 localStorage.setItem('webhook_enviado', 'true');
             }
