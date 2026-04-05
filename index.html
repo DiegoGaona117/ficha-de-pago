@@ -195,7 +195,6 @@
         .instructions ol { padding-left: 1.5rem; color: var(--gray-700); line-height: 1.6; }
         .instructions li { margin-bottom: 0.5rem; }
 
-        /* ── Campo de correo ── */
         .email-section { margin-bottom: 1.5rem; }
 
         .form-label {
@@ -227,13 +226,10 @@
         }
 
         .form-input.error { border-color: var(--error); }
-
         .form-hint { font-size: 0.75rem; color: var(--gray-600); margin-top: 0.3rem; }
-
         .form-error { font-size: 0.75rem; color: var(--error); margin-top: 0.3rem; display: none; }
         .form-error.visible { display: block; }
 
-        /* ── Botón WhatsApp ── */
         .whatsapp-section { text-align: center; }
 
         .whatsapp-btn {
@@ -357,8 +353,6 @@
                 </ol>
             </div>
 
-
-
             <div class="email-section">
                 <label class="form-label" for="clientEmail">Correo a donde recibirás tus planos <span>*</span></label>
                 <input class="form-input" type="email" id="clientEmail" placeholder="Ej: juan@gmail.com" autocomplete="email" />
@@ -389,7 +383,7 @@
     </div>
 
     <script>
-        // ─── WEBHOOK DE MAKE ────────────────────────────────────────────────────
+        // ─── WEBHOOK ÚNICO ──────────────────────────────────────────────────────
         const MAKE_WEBHOOK = 'https://hook.us1.make.com/fyli8y7tmxu6mtqf7byp9vy2g3cji3wa';
 
         // ─── CONFIGURACIÓN DE TURNOS ────────────────────────────────────────────
@@ -451,7 +445,6 @@
             return code;
         }
 
-        // ─── OBTENER O CREAR ORDER CODE PERSISTENTE ─────────────────────────────
         function getOrCreateOrderCode() {
             const stored = localStorage.getItem('order_code');
             if (stored) return stored;
@@ -462,11 +455,8 @@
 
         const ORDER_CODE = getOrCreateOrderCode();
 
-        // ─── WEBHOOK DE PAGO INICIADO ───────────────────────────────────────────
-        const MAKE_WEBHOOK_INITIATE = 'https://hook.us1.make.com/41pz1pshwoeg9wl2h2bkiw9e3sssatl7';
-
+        // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
         async function fireInitiateCheckout() {
-            // ─── SOLO ENVIAR UNA VEZ ────────────────────────────────────────────
             const yaIniciado = localStorage.getItem('initiate_checkout_enviado');
             if (yaIniciado) return;
 
@@ -475,7 +465,6 @@
             const ip        = await getClientIP();
             const userAgent = navigator.userAgent || null;
 
-            // Pixel — InitiateCheckout
             if (typeof fbq === 'function') {
                 fbq('track', 'InitiateCheckout', {
                     value:    50,
@@ -487,13 +476,12 @@
                 });
             }
 
-            // Webhook a Make
-            fetch(MAKE_WEBHOOK_INITIATE, {
+            fetch(MAKE_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    order_code:        ORDER_CODE,
                     evento:            'InitiateCheckout',
+                    order_code:        ORDER_CODE,
                     timestamp:         new Date().toISOString(),
                     producto:          'Paquete Planos',
                     valor:             50,
@@ -505,15 +493,15 @@
                 })
             }).catch(() => {});
 
-            // Marcar como enviado para no repetir
             localStorage.setItem('initiate_checkout_enviado', 'true');
         }
 
         fireInitiateCheckout();
+
+        // ─── EVENTO: PURCHASE ───────────────────────────────────────────────────
         async function buildWhatsappLink(event) {
             event.preventDefault();
 
-            // Validar email
             const emailInput = document.getElementById('clientEmail');
             const email = emailInput.value.trim().toLowerCase();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -534,37 +522,31 @@
             const currentConfig = getCurrentConfig();
             const orderCode = ORDER_CODE;
 
-            // Tracking del navegador
             const fbp       = getCookie('_fbp') || null;
             const fbc       = getFbc()           || null;
             const ip        = await getClientIP();
             const userAgent = navigator.userAgent || null;
 
-            // ─── SOLO ENVIAR WEBHOOK Y PIXEL UNA VEZ ───────────────────────────
             const yaEnviado = localStorage.getItem('webhook_enviado');
             if (!yaEnviado) {
-                // Payload para Make
-                const payload = {
-                    order_code:  orderCode,
-                    timestamp:   new Date().toISOString(),
-                    producto:    'Paquete Planos',
-                    valor:       50,
-                    moneda:      'MXN',
-                    email:       email,
-                    fbp:         fbp,
-                    fbc:         fbc,
-                    client_ip:   ip,
-                    client_user_agent: userAgent,
-                };
-
-                // Enviar a Make en segundo plano (sin bloquear)
                 fetch(MAKE_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        evento:            'Purchase',
+                        order_code:        orderCode,
+                        timestamp:         new Date().toISOString(),
+                        producto:          'Paquete Planos',
+                        valor:             50,
+                        moneda:            'MXN',
+                        email:             email,
+                        fbp:               fbp,
+                        fbc:               fbc,
+                        client_ip:         ip,
+                        client_user_agent: userAgent,
+                    })
                 }).catch(() => {});
 
-                // ─── DISPARAR EVENTO PURCHASE EN EL PIXEL DE META ──────────────
                 if (typeof fbq === 'function') {
                     fbq('track', 'Purchase', {
                         value:    50,
@@ -576,7 +558,6 @@
                     });
                 }
 
-                // Marcar como enviado para no repetir
                 localStorage.setItem('webhook_enviado', 'true');
             }
 
