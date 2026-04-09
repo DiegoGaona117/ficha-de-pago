@@ -148,7 +148,6 @@
             return getCookie('_fbc') || null;
         }
 
-        // ─── GEOLOCALIZACIÓN POR IP ─────────────────────────────────────────────
         async function getGeoData() {
             try {
                 const res  = await fetch('https://ipapi.co/json/');
@@ -183,26 +182,38 @@
             return newCode;
         }
 
+        // Genera un event_id único por cada disparo (para deduplicar Pixel vs CAPI)
+        function generateEventId() {
+            return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+        }
+
         const ORDER_CODE = getOrCreateOrderCode();
 
         // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
+        // Sin bloqueo de localStorage: se dispara en cada visita.
+        // La deduplicación entre Pixel y CAPI la maneja el event_id único.
         async function fireInitiateCheckout() {
-            if (localStorage.getItem('initiate_checkout_enviado')) return;
-
+            const EVENT_ID = generateEventId();
             const fbp = getCookie('_fbp') || null;
             const fbc = getFbc();
             const geo = await getGeoData();
 
             if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout', { value: 50, currency: 'MXN', order_id: ORDER_CODE }, { eventID: ORDER_CODE + '-IC', extern_id: ORDER_CODE });
+                fbq('track', 'InitiateCheckout',
+                    { value: 50, currency: 'MXN', order_id: ORDER_CODE },
+                    { eventID: EVENT_ID }
+                );
             }
 
             fetch(MAKE_WEBHOOK, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    evento: 'InitiateCheckout', order_code: ORDER_CODE,
-                    timestamp: new Date().toISOString(), producto: 'Paquete Planos',
+                    evento: 'InitiateCheckout',
+                    event_id: EVENT_ID,
+                    order_code: ORDER_CODE,
+                    timestamp: new Date().toISOString(),
+                    producto: 'Paquete Planos',
                     valor: 50, moneda: 'MXN', fbp, fbc,
                     client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
                     geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
@@ -210,13 +221,13 @@
                     geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
                 })
             }).catch(() => {});
-
-            localStorage.setItem('initiate_checkout_enviado', 'true');
         }
 
         fireInitiateCheckout();
 
-        // ─── EVENTO: PURCHASE ───────────────────────────────────────────────────
+        // ─── BOTÓN WHATSAPP ─────────────────────────────────────────────────────
+        // Solo abre WhatsApp. El evento Purchase lo dispara Make cuando
+        // confirmas el pago manualmente, no desde el cliente.
         async function buildWhatsappLink(event) {
             event.preventDefault();
 
@@ -224,29 +235,8 @@
             btn.classList.add('loading');
 
             const currentConfig = getCurrentConfig();
-            const fbp = getCookie('_fbp') || null;
-            const fbc = getFbc();
-            const geo = await getGeoData();
-
-            if (!localStorage.getItem('webhook_enviado')) {
-                fetch(MAKE_WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        evento: 'Purchase', order_code: ORDER_CODE,
-                        timestamp: new Date().toISOString(), producto: 'Paquete Planos',
-                        valor: 50, moneda: 'MXN', fbp, fbc,
-                        client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
-                        geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
-                        geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
-                        geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
-                    })
-                }).catch(() => {});
-
-                localStorage.setItem('webhook_enviado', 'true');
-            }
-
             const rawMessage = '¡Hola! Ya realicé mi transferencia por $50 MXN. Adjunto mi comprobante.\n\nCódigo de pedido: ' + ORDER_CODE;
+
             window.open('https://wa.me/' + currentConfig.phone + '?text=' + encodeURIComponent(rawMessage), '_blank');
             btn.classList.remove('loading');
         }
