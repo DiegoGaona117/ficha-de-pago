@@ -182,18 +182,13 @@
             return newCode;
         }
 
-        // Genera un event_id único por cada disparo (para deduplicar Pixel vs CAPI)
-        function generateEventId() {
-            return 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-        }
-
         const ORDER_CODE = getOrCreateOrderCode();
 
         // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
         // Sin bloqueo de localStorage: se dispara en cada visita.
-        // La deduplicación entre Pixel y CAPI la maneja el event_id único.
+        // La deduplicación entre Pixel y CAPI la maneja el event_id (ORDER_CODE-IC).
         async function fireInitiateCheckout() {
-            const EVENT_ID = generateEventId();
+            const EVENT_ID = ORDER_CODE + '-IC';
             const fbp = getCookie('_fbp') || null;
             const fbc = getFbc();
             const geo = await getGeoData();
