@@ -153,7 +153,7 @@
                 const res  = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
                 return {
-                    client_ip:     data.ip           || null,
+                    client_ip:     data.ip            || null,
                     geo_ciudad:    data.city          || null,
                     geo_region:    data.region        || null,
                     geo_pais:      data.country_name  || null,
@@ -185,14 +185,10 @@
         const ORDER_CODE = getOrCreateOrderCode();
 
         // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
-        // Sin bloqueo de localStorage: se dispara en cada visita.
-        // La deduplicación entre Pixel y CAPI la maneja el event_id (ORDER_CODE-IC).
         async function fireInitiateCheckout() {
             const EVENT_ID = ORDER_CODE + '-IC';
-            const fbp = getCookie('_fbp') || null;
-            const fbc = getFbc();
-            const geo = await getGeoData();
-
+            
+            // 1. SIEMPRE se dispara el Pixel (cada vez que recargan la página)
             if (typeof fbq === 'function') {
                 fbq('track', 'InitiateCheckout',
                     { value: 50, currency: 'MXN', order_id: ORDER_CODE },
@@ -200,29 +196,39 @@
                 );
             }
 
-            fetch(MAKE_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    evento: 'InitiateCheckout',
-                    event_id: EVENT_ID,
-                    order_code: ORDER_CODE,
-                    timestamp: new Date().toISOString(),
-                    producto: 'Paquete Planos',
-                    valor: 50, moneda: 'MXN', fbp, fbc,
-                    client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
-                    geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
-                    geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
-                    geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
-                })
-            }).catch(() => {});
+            // 2. SOLO UNA VEZ se dispara el Webhook a Make (usando localStorage)
+            if (!localStorage.getItem('webhook_ic_enviado')) {
+                const fbp = getCookie('_fbp') || null;
+                const fbc = getFbc();
+                const geo = await getGeoData();
+
+                fetch(MAKE_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        evento: 'InitiateCheckout',
+                        event_id: EVENT_ID,
+                        order_code: ORDER_CODE,
+                        timestamp: new Date().toISOString(),
+                        producto: 'Paquete Planos',
+                        valor: 50, moneda: 'MXN', fbp, fbc,
+                        client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
+                        geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
+                        geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
+                        geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
+                    })
+                }).then(() => {
+                    // Si se envía con éxito, creamos esta variable para bloquear futuros envíos a Make
+                    localStorage.setItem('webhook_ic_enviado', 'true');
+                    console.log('✅ Webhook enviado a Make (primera y única vez)');
+                }).catch(() => {});
+            }
         }
 
         fireInitiateCheckout();
 
         // ─── BOTÓN WHATSAPP ─────────────────────────────────────────────────────
-        // Solo abre WhatsApp. El evento Purchase lo dispara Make cuando
-        // confirmas el pago manualmente, no desde el cliente.
+        // Este botón SOLO abre WhatsApp, no envía nada extra a Make.
         async function buildWhatsappLink(event) {
             event.preventDefault();
 
