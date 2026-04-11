@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalizar Compra - Diego Gaona</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧾</text></svg>">
+    
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -15,9 +16,10 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '373277814132384');
-    fbq('track', 'PageView');
+    // ⚠️ PageView automático removido para enviarlo con event_id personalizado abajo
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"/></noscript>
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RN68VLQLTW"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -25,6 +27,7 @@
       gtag('js', new Date());
       gtag('config', 'G-RN68VLQLTW');
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         :root {
@@ -125,8 +128,8 @@
     </div>
 
     <script>
-        const MAKE_WEBHOOK = 'https://hook.us1.make.com/fyli8y7tmxu6mtqf7byp9vy2g3cji3wa';
-
+        const WORKER_URL = 'https://meta-capi.cursodiegogaona.workers.dev';
+        
         const config = {
             turno1: { phone: '5214621579719', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Diego Armando Gaona Ramírez', clabe: '012210028972966223', concepto: 'Paquete de Planos' },
             turno2: { phone: '5214622856400', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Pablo Alberto Gaona Ramírez', clabe: '012180015336316989', concepto: 'Paquete de Planos' }
@@ -137,6 +140,7 @@
             return ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3)) ? config.turno1 : config.turno2;
         }
 
+        // --- Helpers Funciones ---
         function getCookie(name) {
             const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
             return match ? decodeURIComponent(match[2]) : null;
@@ -146,25 +150,6 @@
             const fbclid = new URLSearchParams(window.location.search).get('fbclid');
             if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
             return getCookie('_fbc') || null;
-        }
-
-        async function getGeoData() {
-            try {
-                const res  = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                return {
-                    client_ip:     data.ip            || null,
-                    geo_ciudad:    data.city          || null,
-                    geo_region:    data.region        || null,
-                    geo_pais:      data.country_name  || null,
-                    geo_pais_code: data.country       || null,
-                    geo_cp:        data.postal        || null,
-                    geo_lat:       data.latitude      || null,
-                    geo_lng:       data.longitude     || null,
-                };
-            } catch (e) {
-                return { client_ip: null, geo_ciudad: null, geo_region: null, geo_pais: null, geo_pais_code: null, geo_cp: null, geo_lat: null, geo_lng: null };
-            }
         }
 
         function generateOrderCode() {
@@ -182,67 +167,121 @@
             return newCode;
         }
 
-        const ORDER_CODE = getOrCreateOrderCode();
-
-        // ─── EVENTO: INITIATE CHECKOUT ──────────────────────────────────────────
-        async function fireInitiateCheckout() {
-            const EVENT_ID = ORDER_CODE + '-IC';
-            
-            // 1. SIEMPRE se dispara el Pixel (cada vez que recargan la página)
-            if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout',
-                    { value: 50, currency: 'MXN', order_id: ORDER_CODE },
-                    { eventID: EVENT_ID }
-                );
-            }
-
-            // 2. SOLO UNA VEZ se dispara el Webhook a Make (usando localStorage)
-            if (!localStorage.getItem('webhook_ic_enviado')) {
-                const fbp = getCookie('_fbp') || null;
-                const fbc = getFbc();
-                const geo = await getGeoData();
-
-                fetch(MAKE_WEBHOOK, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        evento: 'InitiateCheckout',
-                        event_id: EVENT_ID,
-                        order_code: ORDER_CODE,
-                        timestamp: new Date().toISOString(),
-                        producto: 'Paquete Planos',
-                        valor: 50, moneda: 'MXN', fbp, fbc,
-                        client_ip: geo.client_ip, client_user_agent: navigator.userAgent,
-                        geo_ciudad: geo.geo_ciudad, geo_region: geo.geo_region,
-                        geo_pais: geo.geo_pais, geo_pais_code: geo.geo_pais_code,
-                        geo_cp: geo.geo_cp, geo_lat: geo.geo_lat, geo_lng: geo.geo_lng,
-                    })
-                }).then(() => {
-                    // Si se envía con éxito, creamos esta variable para bloquear futuros envíos a Make
-                    localStorage.setItem('webhook_ic_enviado', 'true');
-                    console.log('✅ Webhook enviado a Make (primera y única vez)');
-                }).catch(() => {});
+        async function getGeoData() {
+            try {
+                const res  = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                return {
+                    client_ip:     data.ip             || null,
+                    geo_ciudad:    data.city           || null,
+                    geo_region:    data.region         || null,
+                    geo_pais:      data.country_name   || null,
+                    geo_pais_code: data.country        || null,
+                    geo_cp:        data.postal         || null,
+                };
+            } catch (e) {
+                return { client_ip: null, geo_ciudad: null, geo_region: null, geo_pais: null, geo_pais_code: null, geo_cp: null };
             }
         }
 
-        fireInitiateCheckout();
+        // Función central para enviar a Cloudflare Worker
+        async function sendToWorker(payload) {
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                console.log(`✅ [Cloudflare] ${payload.evento} procesado:`, json);
+            } catch (e) {
+                console.error(`❌ [Cloudflare] Error enviando ${payload.evento}:`, e);
+            }
+        }
 
-        // ─── BOTÓN WHATSAPP ─────────────────────────────────────────────────────
-        // Este botón SOLO abre WhatsApp, no envía nada extra a Make.
+        // ─── LÓGICA DE EVENTOS (PIXEL + CAPI) ────────────────────────────────────────
+        async function fireTrackingEvents() {
+            const ORDER_CODE = getOrCreateOrderCode();
+            const timestampNow = Date.now();
+            
+            // Generamos IDs únicos para esta carga de página
+            const EVENT_ID_PAGEVIEW = ORDER_CODE + '-PV-' + timestampNow;
+            const EVENT_ID_CHECKOUT = ORDER_CODE + '-IC-' + timestampNow;
+
+            const geo = await getGeoData();
+            
+            // Datos compartidos para el servidor
+            const serverPayloadBase = {
+                order_code: ORDER_CODE,
+                fbp: getCookie('_fbp') || null,
+                fbc: getFbc(),
+                client_ip: geo.client_ip,
+                client_user_agent: navigator.userAgent,
+                geo_ciudad: geo.geo_ciudad,
+                geo_region: geo.geo_region,
+                geo_pais: geo.geo_pais,
+                geo_pais_code: geo.geo_pais_code,
+                geo_cp: geo.geo_cp
+            };
+
+            // 1. EVENTO: PAGEVIEW
+            console.log('-----------------------------------');
+            console.log(`📡 [Navegador] Enviando PageView -> event_id: ${EVENT_ID_PAGEVIEW}`);
+            if (typeof fbq === 'function') {
+                fbq('track', 'PageView', {}, { eventID: EVENT_ID_PAGEVIEW });
+            }
+            
+            console.log(`📡 [Servidor] Enviando PageView a Cloudflare...`);
+            await sendToWorker({
+                ...serverPayloadBase,
+                evento: 'PageView',
+                event_id: EVENT_ID_PAGEVIEW,
+                producto: 'Checkout Planos PDF',
+                valor: 0,
+                moneda: 'MXN'
+            });
+
+
+            // 2. EVENTO: INITIATE CHECKOUT
+            console.log('-----------------------------------');
+            console.log(`🛒 [Navegador] Enviando InitiateCheckout -> event_id: ${EVENT_ID_CHECKOUT}`);
+            if (typeof fbq === 'function') {
+                fbq('track', 'InitiateCheckout', 
+                    { content_name: 'Paquete de Planos', value: 60, currency: 'MXN', order_id: ORDER_CODE }, 
+                    { eventID: EVENT_ID_CHECKOUT }
+                );
+            }
+
+            console.log(`🛒 [Servidor] Enviando InitiateCheckout a Cloudflare...`);
+            await sendToWorker({
+                ...serverPayloadBase,
+                evento: 'InitiateCheckout',
+                event_id: EVENT_ID_CHECKOUT,
+                producto: 'Paquete de Planos',
+                valor: 60,
+                moneda: 'MXN'
+            });
+            console.log('-----------------------------------');
+        }
+
+        // Ejecutar los eventos al cargar la página
+        window.addEventListener('load', fireTrackingEvents);
+
+
+        // ─── BOTÓN WHATSAPP Y DATOS DINÁMICOS ───────────────────────────────────
         async function buildWhatsappLink(event) {
             event.preventDefault();
-
             const btn = document.getElementById('whatsappBtn');
             btn.classList.add('loading');
 
             const currentConfig = getCurrentConfig();
+            const ORDER_CODE = localStorage.getItem('order_code') || 'PL-SIN-CODIGO';
             const rawMessage = '¡Hola! Ya realicé mi transferencia por $60 MXN. Adjunto mi comprobante.\n\nCódigo de pedido: ' + ORDER_CODE;
 
             window.open('https://wa.me/' + currentConfig.phone + '?text=' + encodeURIComponent(rawMessage), '_blank');
             btn.classList.remove('loading');
         }
 
-        // ─── ACTUALIZAR DATOS BANCARIOS Y HORARIO ──────────────────────────────
         function updatePageData() {
             const currentConfig = getCurrentConfig();
             document.getElementById('attendantName').textContent = currentConfig.schedule;
