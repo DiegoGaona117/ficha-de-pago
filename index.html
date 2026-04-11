@@ -201,6 +201,13 @@
 
         // ─── LÓGICA DE EVENTOS (PIXEL + CAPI) ────────────────────────────────────────
         async function fireTrackingEvents() {
+            // 🛡️ ESCUDO DE SESIÓN: Evita eventos duplicados si el usuario presiona F5
+            if (sessionStorage.getItem('checkout_visitado')) {
+                console.log('🛑 [Tracking] Eventos ya enviados en esta sesión. Se omiten por recarga de página.');
+                return;
+            }
+            sessionStorage.setItem('checkout_visitado', 'true');
+
             const ORDER_CODE = getOrCreateOrderCode();
             const timestampNow = Date.now();
             
