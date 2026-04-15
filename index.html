@@ -16,10 +16,9 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '373277814132384');
-    // ⚠️ PageView automático removido para enviarlo con event_id personalizado abajo
+    fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=373277814132384&ev=PageView&noscript=1"/></noscript>
-    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RN68VLQLTW"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -128,8 +127,7 @@
     </div>
 
     <script>
-        const WORKER_URL = 'https://meta-capi.cursodiegogaona.workers.dev';
-        
+        // --- Configuración de Turnos y Cuentas ---
         const config = {
             turno1: { phone: '5214621579719', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Diego Armando Gaona Ramírez', clabe: '012210028972966223', concepto: 'Paquete de Planos' },
             turno2: { phone: '5214622856400', schedule: 'Horario de atención: 9:00 AM - 11:00 PM', bank: 'BBVA México', titular: 'Pablo Alberto Gaona Ramírez', clabe: '012180015336316989', concepto: 'Paquete de Planos' }
@@ -140,18 +138,7 @@
             return ((hour >= 15 && hour < 24) || (hour >= 0 && hour < 3)) ? config.turno1 : config.turno2;
         }
 
-        // --- Helpers Funciones ---
-        function getCookie(name) {
-            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-            return match ? decodeURIComponent(match[2]) : null;
-        }
-
-        function getFbc() {
-            const fbclid = new URLSearchParams(window.location.search).get('fbclid');
-            if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
-            return getCookie('_fbc') || null;
-        }
-
+        // --- Helpers para Código de Pedido ---
         function generateOrderCode() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = 'PL-';
@@ -167,116 +154,25 @@
             return newCode;
         }
 
-        async function getGeoData() {
-            try {
-                const res  = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                return {
-                    client_ip:     data.ip             || null,
-                    geo_ciudad:    data.city           || null,
-                    geo_region:    data.region         || null,
-                    geo_pais:      data.country_name   || null,
-                    geo_pais_code: data.country        || null,
-                    geo_cp:        data.postal         || null,
-                };
-            } catch (e) {
-                return { client_ip: null, geo_ciudad: null, geo_region: null, geo_pais: null, geo_pais_code: null, geo_cp: null };
-            }
-        }
-
-        // Función central para enviar a Cloudflare Worker
-        async function sendToWorker(payload) {
-            try {
-                const res = await fetch(WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const json = await res.json();
-                console.log(`✅ [Cloudflare] ${payload.evento} procesado:`, json);
-            } catch (e) {
-                console.error(`❌ [Cloudflare] Error enviando ${payload.evento}:`, e);
-            }
-        }
-
-        // ─── LÓGICA DE EVENTOS (PIXEL + CAPI) ────────────────────────────────────────
-        async function fireTrackingEvents() {
-            // 🛡️ ESCUDO DE SESIÓN: Evita eventos duplicados si el usuario presiona F5
-            if (sessionStorage.getItem('checkout_visitado')) {
-                console.log('🛑 [Tracking] Eventos ya enviados en esta sesión. Se omiten por recarga de página.');
-                return;
-            }
+        // --- Evento InitiateCheckout (Client-Side Standard) ---
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('checkout_visitado')) return;
             sessionStorage.setItem('checkout_visitado', 'true');
-
+            
             const ORDER_CODE = getOrCreateOrderCode();
-            const timestampNow = Date.now();
             
-            // Generamos IDs únicos para esta carga de página
-            const EVENT_ID_PAGEVIEW = ORDER_CODE + '-PV-' + timestampNow;
-            const EVENT_ID_CHECKOUT = ORDER_CODE + '-IC-' + timestampNow;
-
-            const geo = await getGeoData();
-            
-            // Datos compartidos para el servidor
-            const serverPayloadBase = {
-                order_code: ORDER_CODE,
-                fbp: getCookie('_fbp') || null,
-                fbc: getFbc(),
-                client_ip: geo.client_ip,
-                client_user_agent: navigator.userAgent,
-                geo_ciudad: geo.geo_ciudad,
-                geo_region: geo.geo_region,
-                geo_pais: geo.geo_pais,
-                geo_pais_code: geo.geo_pais_code,
-                geo_cp: geo.geo_cp
-            };
-
-            // 1. EVENTO: PAGEVIEW
-            console.log('-----------------------------------');
-            console.log(`📡 [Navegador] Enviando PageView -> event_id: ${EVENT_ID_PAGEVIEW}`);
             if (typeof fbq === 'function') {
-                fbq('track', 'PageView', {}, { eventID: EVENT_ID_PAGEVIEW });
+                fbq('track', 'InitiateCheckout', {
+                    content_name: 'Paquete de Planos',
+                    value: 69,
+                    currency: 'MXN',
+                    order_id: ORDER_CODE
+                });
             }
-            
-            console.log(`📡 [Servidor] Enviando PageView a Cloudflare...`);
-            await sendToWorker({
-                ...serverPayloadBase,
-                evento: 'PageView',
-                event_id: EVENT_ID_PAGEVIEW,
-                producto: 'Checkout Planos PDF',
-                valor: 0,
-                moneda: 'MXN'
-            });
+        });
 
-
-            // 2. EVENTO: INITIATE CHECKOUT
-            console.log('-----------------------------------');
-            console.log(`🛒 [Navegador] Enviando InitiateCheckout -> event_id: ${EVENT_ID_CHECKOUT}`);
-            if (typeof fbq === 'function') {
-                fbq('track', 'InitiateCheckout', 
-                    { content_name: 'Paquete de Planos', value: 69, currency: 'MXN', order_id: ORDER_CODE }, 
-                    { eventID: EVENT_ID_CHECKOUT }
-                );
-            }
-
-            console.log(`🛒 [Servidor] Enviando InitiateCheckout a Cloudflare...`);
-            await sendToWorker({
-                ...serverPayloadBase,
-                evento: 'InitiateCheckout',
-                event_id: EVENT_ID_CHECKOUT,
-                producto: 'Paquete de Planos',
-                valor: 69,
-                moneda: 'MXN'
-            });
-            console.log('-----------------------------------');
-        }
-
-        // Ejecutar los eventos al cargar la página
-        window.addEventListener('load', fireTrackingEvents);
-
-
-        // ─── BOTÓN WHATSAPP Y DATOS DINÁMICOS ───────────────────────────────────
-        async function buildWhatsappLink(event) {
+        // --- Botón de WhatsApp ---
+        function buildWhatsappLink(event) {
             event.preventDefault();
             const btn = document.getElementById('whatsappBtn');
             btn.classList.add('loading');
@@ -289,14 +185,20 @@
             btn.classList.remove('loading');
         }
 
+        // --- Interfaz Bancaria ---
         function updatePageData() {
             const currentConfig = getCurrentConfig();
             document.getElementById('attendantName').textContent = currentConfig.schedule;
+            
             const fields = ['bank', 'titular', 'clabe', 'concepto'];
             fields.forEach(field => {
                 const el = document.querySelector('[data-field="' + field + '"]');
-                if (el) { el.textContent = currentConfig[field]; el.setAttribute('data-value', currentConfig[field]); }
+                if (el) { 
+                    el.textContent = currentConfig[field]; 
+                    el.setAttribute('data-value', currentConfig[field]); 
+                }
             });
+            
             document.querySelectorAll('.copy-btn').forEach((btn, index) => {
                 const field = fields[index];
                 if (field) btn.onclick = function(e) { copyText(currentConfig[field], e); };
@@ -311,8 +213,13 @@
                 const button = event.target;
                 button.textContent = '¡Copiado!';
                 button.classList.add('copied');
-                setTimeout(function() { button.textContent = 'Copiar'; button.classList.remove('copied'); }, 2000);
-            }).catch(function() { alert('Texto copiado: ' + text); });
+                setTimeout(function() { 
+                    button.textContent = 'Copiar'; 
+                    button.classList.remove('copied'); 
+                }, 2000);
+            }).catch(function() { 
+                alert('Texto copiado: ' + text); 
+            });
         }
 
         document.querySelectorAll('.bank-value').forEach(element => {
